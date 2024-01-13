@@ -9,7 +9,26 @@ const tasks = ref([
 ])
 
 const isPopup = ref(false)
+const isNull = ref(true)
+const name = ref('')
+const time = ref()
+function setData(){
+  console.log(name.value)
+  const newTask = {
+    name : name.value,
+    time : time.value,
+  }
 
+  tasks.value.push(newTask)
+
+  name.value = ''
+  time.value = null
+  isNull.value = true
+}
+
+function isEmpty(){
+  return (name.value == '' || time.value <= 0) ? false : true
+}
 </script>
 
 <template>
@@ -23,13 +42,16 @@ const isPopup = ref(false)
 
     <div class="overlay" :style="!isPopup ? 'display:none' : 'display:flex' ">
       <form @submit.prevent class="popup">
+
+        <strong v-if="!isNull" style="color: brown;">Please Fill the Right Information</strong><br/><br/>
+
         <label for="name">Name</label><br/>
-        <input type="text" name="name"><br/>
+        <input type="text" v-model="name"><br/>
 
         <label for="time">Time</label><br/>
-        <input type="number" name="time"><br/>
+        <input type="number" v-model="time"><br/>
 
-        <input @click="isPopup = !isPopup" type="submit" value="Add">
+        <input @click="isEmpty() ? [isPopup = false, setData()] : isNull = false" type="submit" value="Add">
       </form>
     </div>
   </div>
