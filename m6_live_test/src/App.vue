@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 const tasks = ref([
-  { name: "Task 1", time: 30},
-  { name: "Task 2", time: 40},
-  { name: "Task 3", time: 60},
-  { name: "Task 4", time: 45},
-  { name: "Task 5", time: 50},
+  { name: "Task 1", time: 60},
+  { name: "Task 2", time: 75},
+  { name: "Task 3", time: 55},
+  { name: "Task 4", time: 30},
+  { name: "Task 5", time: 20},
 ])
 
 const isPopup = ref(false)
@@ -13,32 +13,15 @@ const isNull = ref(true)
 const name = ref('')
 const time = ref()
 const idx = ref()
+const objName = ref('')
+const objTime = ref()
 function setData(){
-  // console.log(name.value)
-  // const newTask = {
-  //   name : name.value,
-  //   time : time.value,
-  // }
 
-
-  const ts = tasks.value[idx]
-  ts.name.value = name.value
-  ts.time.value = time.value
-  // tasks.value[idx]  = {
-  //   name : name.value,
-  //   time : time.value,
-  // }
-
-  // tasks.value.splice(idx, 1, {
-  //   name : name.value,
-  //   time : time.value,
-  // });
-
-  //tasks.value.push(newTask)
+  tasks.value[idx.value].name = name.value
+  tasks.value[idx.value].time = time.value
 
   name.value = ''
   time.value = null
-  idx.value = null
   isNull.value = true
 }
 
@@ -52,7 +35,7 @@ function isEmpty(){
     <h1>My Tasks</h1>
   
     <ol>
-      <li v-for="(task, index) in tasks" :key="index">{{ task.name }} : {{ task.time }} minutes <button @click="isPopup = !isPopup, idx = index">Edit</button></li>
+      <li v-for="(task, index) in tasks" :key="index">{{ task.name }} : {{ task.time }} minutes <button @click="isPopup = !isPopup, idx = index, objName = task.name, objTime = task.time">Edit</button></li>
     </ol>
 
     <div class="overlay" :style="!isPopup ? 'display:none' : 'display:flex' ">
@@ -61,10 +44,10 @@ function isEmpty(){
         <strong v-if="!isNull" style="color: brown;">Please Fill the Right Information</strong><br/><br/>
 
         <label for="name">Name</label><br/>
-        <input type="text" v-model="name"><br/>
+        <input type="text" v-model="name" :placeholder="objName"><br/>
 
         <label for="time">Time</label><br/>
-        <input type="number" v-model="time"><br/>
+        <input type="number" v-model="time" :placeholder="objTime"><br/>
 
         <input @click="isEmpty() ? [isPopup = false, setData()] : isNull = false" type="submit" value="Add">
       </form>
